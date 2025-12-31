@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Birthday Reminder App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 40px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 5px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="birthdayForm">
+    <h2>Birthday Reminder 🎂</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="date" id="dateOfBirth" required />
+    <button type="submit">Register</button>
+    <p id="message"></p>
+  </form>
+
+  <script>
+    const form = document.getElementById("birthdayForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const dateOfBirth = document.getElementById("dateOfBirth").value;
+
+      const response = await fetch("/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username, email, dateOfBirth })
+      });
+
+      const data = await response.json();
+
+      message.textContent = data.message;
+      message.style.color = response.ok ? "green" : "red";
+
+      if (response.ok) {
+        form.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
